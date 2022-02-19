@@ -1,0 +1,43 @@
+{
+  "name": "simple-trigger",
+  "version": "1.0.0",
+  "description": "A simple triggererer",
+  "scripts": {
+    "start": "PORT=80 react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
+  },
+  "author": "Shaun Mulligan <shaun@balena.io>",
+  "dependencies": {
+    "@neurosity/notion": "^5.7.0",
+    "@reach/router": "^1.2.1",
+    "anonymus": "^1.6.3",
+    "color-hash": "^1.0.3",
+    "moment": "^2.22.2",
+    "onoff": "^6.0.3",
+    "react": "^16.12.0",
+    "react-circular-progressbar": "^2.0.3",
+    "react-dom": "^16.12.0",
+    "react-scripts": "^3.4.3",
+    "react-select": "^2.0.0",
+    "react-use": "^13.21.0",
+    "reflexbox": "^4.0.6",
+    "styled-components": "^5.3.3",
+    "websocket": "^1.0.34"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
