@@ -1,23 +1,10 @@
-// Node.js socket server script
-// const net = require("net");
-// // Create a server object
-// const server = net
-//   .createServer((socket) => {
-//     socket.on("data", (data) => {
-//       const payload = JSON.parse(data);
-//       console.log(payload);
-//       processMsg(payload, socket);
-//     });
-//     // socket.write("SERVER: Hello! This is server speaking.<br>");
-//     // socket.end("SERVER: Closing connection now.<br>");
-//   })
-//   .on("error", (err) => {
-//     console.error(err);
-//   });
-// // Open server on port 9898
-// server.listen(9898, () => {
-//   console.log("opened server on", server.address().port);
-// });
+const express = require("express");
+const app = express();
+
+app.use(express.static(__dirname + "/build"));
+
+app.listen("80");
+console.log("working on 80");
 
 const http = require("http");
 const WebSocketServer = require("websocket").server;

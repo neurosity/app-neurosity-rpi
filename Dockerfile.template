@@ -20,10 +20,12 @@ RUN JOBS=MAX npm install --production --unsafe-perm && npm cache verify && rm -r
 # This will copy all files in our root to the working directory in the container
 COPY . ./
 
+RUN npm run build
+
 # Enable udevd so that plugged dynamic hardware devices show up in our container.
 ENV UDEV=1
 
 # server.js will run when container starts up on the device
-CMD ["npm", "start"]
+CMD ["node", "main.js"]
 # CMD ["bash","./start.sh"]
 

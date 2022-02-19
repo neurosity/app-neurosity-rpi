@@ -13,6 +13,7 @@
     "@reach/router": "^1.2.1",
     "anonymus": "^1.6.3",
     "color-hash": "^1.0.3",
+    "express": "^4.17.3",
     "moment": "^2.22.2",
     "onoff": "^6.0.3",
     "react": "^16.12.0",
