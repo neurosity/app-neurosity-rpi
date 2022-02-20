@@ -26,7 +26,9 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(9898);
+server.listen(9898, () => {
+  console.log("started");
+});
 
 const Gpio = require("onoff").Gpio;
 
@@ -35,6 +37,7 @@ const processMsg = async (msg, socket) => {
     ...msg,
     message: { success: false, error: "" },
   };
+  console.log("processMsg", msg);
   if (msg?.command === "auth") {
     if (msg?.action === "login") {
       const output = await login(msg.message);
