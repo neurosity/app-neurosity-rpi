@@ -1,33 +1,34 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 
 app.use(express.static(__dirname + "/build"));
-
-app.listen("80");
-console.log("working on 80");
-
-const http = require("http");
-const WebSocketServer = require("websocket").server;
-const server = http.createServer();
-server.listen(9898);
-const wsServer = new WebSocketServer({
-  httpServer: server,
+app.get("*", function (request, response) {
+  response.sendFile(path.resolve(__dirname, "build/index.html"));
 });
-wsServer.on("request", function (request) {
-  const connection = request.accept(null, request.origin);
-  connection.on("message", function (message) {
-    console.log("Received Message:", message.utf8Data);
-    const payload = JSON.parse(message.utf8Data);
-    console.log(payload);
-    processMsg(payload, connection);
-    // connection.sendUTF("Hi this is WebSocket server!");
+app.listen("8080");
+console.log("working on 8080");
+
+const server = require("http").createServer();
+const io = require("socket.io")(server, { cors: { origin: "*" } });
+io.on("connection", (socket) => {
+  console.log("Client has connected.");
+
+  socket.on("event", (data, callback) => {
+    const payload = JSON.parse(data);
+    console.log("payload", payload);
+    const res = processMsg(payload, socket);
+    callback(JSON.stringify(res));
   });
-  connection.on("close", function (reasonCode, description) {
+
+  socket.on("disconnect", () => {
     console.log("Client has disconnected.");
   });
 });
 
-const processMsg = async (msg, connection) => {
+server.listen(9898);
+
+const processMsg = async (msg, socket) => {
   let res = {
     ...msg,
     message: { success: false, error: "" },
@@ -54,7 +55,7 @@ const processMsg = async (msg, connection) => {
       }
     }
   }
-  connection.sendUTF(JSON.stringify(res));
+  return res;
 };
 
 const { Notion } = require("@neurosity/notion");

@@ -23,6 +23,8 @@
     "react-select": "^2.0.0",
     "react-use": "^13.21.0",
     "reflexbox": "^4.0.6",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
     "styled-components": "^5.3.3",
     "websocket": "^1.0.34"
   },

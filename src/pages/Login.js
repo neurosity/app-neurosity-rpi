@@ -4,6 +4,7 @@ import useEffectOnce from "react-use/lib/useEffectOnce";
 
 import { LoginForm } from "../components/LoginForm";
 import { Footer } from "../components/Footer";
+import io from "socket.io-client";
 
 import { notion, useNotion } from "../services/notion";
 
@@ -22,6 +23,7 @@ export function Login() {
 
   useEffect(() => {
     if (email && password) {
+      console.log("loging()");
       login();
     }
 
@@ -32,19 +34,18 @@ export function Login() {
       });
 
       if (auth) {
-        const ws = new WebSocket("ws://localhost:9898/");
-        ws.onopen = function () {
-          console.log("WebSocket Client Connected");
+        const socket = io("ws://localhost:9898");
+        socket.on("connect", () => {
           const payload = {
             action: "login",
             command: "auth",
             message: { email, password },
           };
-          ws.send(JSON.stringify(payload));
-        };
-        ws.onmessage = function (e) {
-          console.log("Received: '" + e.data + "'");
-        };
+          socket.emit("event", JSON.stringify(payload), (data) => {
+            console.log(JSON.stringify(data, null, 2));
+          });
+        });
+
         resetForm();
 
         if (lastSelectedDeviceId) {
