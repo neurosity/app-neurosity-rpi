@@ -114,7 +114,7 @@ const gpioSetup = (config) => {
         throw err;
       }
       const marker = `gpio-${gpioEdgeDetectDirection}-${value}`;
-      // crown.addMarker(marker);
+      crown.addMarker(marker);
       console.log("marker", marker);
     });
     return {

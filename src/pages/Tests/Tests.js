@@ -179,7 +179,7 @@ function Test({ test, sleepMode }) {
   }, [setPassed, setStatus, setActiveInstruction, setTesting, setTestResults]);
 
   return (
-    <div className="card">
+    <div className="test-card">
       <header className="card-header">
         <h3>
           {test.name}
