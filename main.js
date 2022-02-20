@@ -6,8 +6,8 @@ app.use(express.static(__dirname + "/build"));
 app.get("*", function (request, response) {
   response.sendFile(path.resolve(__dirname, "build/index.html"));
 });
-app.listen("8080");
-console.log("working on 8080");
+app.listen("80");
+console.log("working on 80");
 
 const server = require("http").createServer();
 const io = require("socket.io")(server, { cors: { origin: "*" } });
