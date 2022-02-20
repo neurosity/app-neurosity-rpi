@@ -28,6 +28,8 @@ io.on("connection", (socket) => {
 
 server.listen(9898);
 
+const Gpio = require("onoff").Gpio;
+
 const processMsg = async (msg, socket) => {
   let res = {
     ...msg,
@@ -42,9 +44,20 @@ const processMsg = async (msg, socket) => {
     }
   } else if (msg?.command === "gpio") {
     if (msg?.action === "setup") {
-      const output = gpioSetup(msg.message);
-      if (output.success) {
-        res.message.success = true;
+      const { gpioEdgeDetectDirection, gpioPin } = msg.message;
+      const interrupt = new Gpio(gpioPin, "in", gpioEdgeDetectDirection);
+      try {
+        interrupt.watch((err, value) => {
+          if (err) {
+            throw err;
+          }
+          const marker = `gpio-${gpioEdgeDetectDirection}-${value}`;
+          console.log("marker", marker);
+          crown.addMarker(marker);
+          console.log("added marker");
+        });
+      } catch (e) {
+        console.log(e.message);
       }
     }
   } else if (msg?.command === "websock") {
@@ -103,31 +116,30 @@ const verifyEnvs = (email, password) => {
   return null;
 };
 
-const Gpio = require("onoff").Gpio;
-
-const gpioSetup = (config) => {
-  const { gpioEdgeDetectDirection, gpioPin } = config;
-  const interrupt = new Gpio(gpioPin, "in", gpioEdgeDetectDirection);
-  try {
-    interrupt.watch((err, value) => {
-      if (err) {
-        throw err;
-      }
-      const marker = `gpio-${gpioEdgeDetectDirection}-${value}`;
-      crown.addMarker(marker);
-      console.log("marker", marker);
-    });
-    return {
-      success: true,
-      error: "",
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error.msg,
-    };
-  }
-};
+// const gpioSetup = (config) => {
+//   const { gpioEdgeDetectDirection, gpioPin } = config;
+//   const interrupt = new Gpio(gpioPin, "in", gpioEdgeDetectDirection);
+//   // const interrupt = new Gpio(2, "in", "falling");
+//   try {
+//     interrupt.watch((err, value) => {
+//       if (err) {
+//         throw err;
+//       }
+//       const marker = `gpio-${gpioEdgeDetectDirection}-${value}`;
+//       crown.addMarker(marker);
+//       console.log("marker", marker);
+//     });
+//     return {
+//       success: true,
+//       error: "",
+//     };
+//   } catch (error) {
+//     return {
+//       success: false,
+//       error: error.msg,
+//     };
+//   }
+// };
 
 process.on("SIGTERM", () => {
   if (crown) {
